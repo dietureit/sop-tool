@@ -12,6 +12,14 @@ import dotenv from 'dotenv';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
 import { copyFileSync, mkdirSync, existsSync, readdirSync } from 'fs';
+import User from '../models/User';
+import Department from '../models/Department';
+import RoleDefinition from '../models/RoleDefinition';
+import SOP from '../models/SOP';
+import SOPVersion from '../models/SOPVersion';
+import SOPComment from '../models/SOPComment';
+import EditRequest from '../models/EditRequest';
+import AuditLog from '../models/AuditLog';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -23,16 +31,12 @@ const SQLITE_PATH = process.argv.find((a) => !a.startsWith('-') && a.endsWith('.
   process.env.SQLITE_PATH ||
   join(__dirname, '..', '..', 'SopMaster-1', 'sop.db');
 
-const User = (await import('../models/User.js')).default;
-const Department = (await import('../models/Department.js')).default;
-const RoleDefinition = (await import('../models/RoleDefinition.js')).default;
-const SOP = (await import('../models/SOP.js')).default;
-const SOPVersion = (await import('../models/SOPVersion.js')).default;
-const SOPComment = (await import('../models/SOPComment.js')).default;
-const EditRequest = (await import('../models/EditRequest.js')).default;
-const AuditLog = (await import('../models/AuditLog.js')).default;
-
-const idMap = { department: {}, user: {}, role: {}, sop: {} };
+const idMap: Record<'department' | 'user' | 'role' | 'sop', Record<string, any>> = {
+  department: {},
+  user: {},
+  role: {},
+  sop: {},
+};
 
 function parseJson(s, def = []) {
   if (!s) return def;

@@ -7,7 +7,7 @@ import { formatDateTime } from '@/lib/utils';
 import { ArrowLeftIcon } from '@heroicons/react/24/outline';
 
 export default function AuditLogsClient({ user }) {
-  const [logs, setLogs] = useState([]);
+  const [logs, setLogs] = useState<any[]>([]);
   const [total, setTotal] = useState(0);
   const [loading, setLoading] = useState(true);
   const [filters, setFilters] = useState({ action: '', resourceType: '', page: 1 });
@@ -21,7 +21,7 @@ export default function AuditLogsClient({ user }) {
     const params = new URLSearchParams();
     if (filters.action) params.set('action', filters.action);
     if (filters.resourceType) params.set('resourceType', filters.resourceType);
-    params.set('page', filters.page);
+    params.set('page', String(filters.page));
     const res = await fetch(`/api/audit-logs?${params}`);
     if (res.ok) {
       const data = await res.json();

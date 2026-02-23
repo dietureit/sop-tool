@@ -10,8 +10,8 @@ import SOPFilterBar from '@/components/dashboard/SOPFilterBar';
 import { PlusIcon } from '@heroicons/react/24/outline';
 
 export default function DashboardClient({ user }) {
-  const [sops, setSops] = useState([]);
-  const [departments, setDepartments] = useState([]);
+  const [sops, setSops] = useState<any[]>([]);
+  const [departments, setDepartments] = useState<any[]>([]);
   const [analytics, setAnalytics] = useState({ total: 0, pending: 0, approved: 0, rejected: 0 });
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState('');

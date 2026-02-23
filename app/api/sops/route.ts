@@ -32,7 +32,7 @@ export async function GET(request) {
     const isSuperAdmin = session.user.roles?.includes('super_admin');
     const userDeptIds = (session.user.departments || []).map((d) => (typeof d === 'object' ? d.id : d));
 
-    let query = {};
+    let query: Record<string, any> = {};
     if (!isSuperAdmin && userDeptIds.length) {
       const allowedDeptIds = await Department.find({ _id: { $in: userDeptIds } }).distinct('_id');
       query.department = department

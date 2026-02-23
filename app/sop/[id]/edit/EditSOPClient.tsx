@@ -8,41 +8,49 @@ import ProcedureStepBuilder from '@/components/sop/ProcedureStepBuilder';
 import RoleSelector from '@/components/sop/RoleSelector';
 import { ArrowLeftIcon, PlusIcon } from '@heroicons/react/24/outline';
 
-export default function CreateSOPClient({ user }) {
+export default function EditSOPClient({ sopId, user }) {
   const router = useRouter();
-  const [departments, setDepartments] = useState([]);
-  const [roles, setRoles] = useState([]);
-  const [formData, setFormData] = useState({
-    title: '',
-    department: '',
-    purpose: '',
-    scope: '',
-    procedure: [],
-    responsibilities: [],
-    accountability: [],
-    exceptions: '',
-  });
+  const [sop, setSop] = useState<any | null>(null);
+  const [departments, setDepartments] = useState<any[]>([]);
+  const [roles, setRoles] = useState<any[]>([]);
+  const [formData, setFormData] = useState<any | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
   useEffect(() => {
     (async () => {
-      const [dRes, rRes] = await Promise.all([
+      const [sopRes, dRes, rRes] = await Promise.all([
+        fetch(`/api/sops/${sopId}`),
         fetch('/api/departments'),
         fetch('/api/role-definitions'),
       ]);
+      if (sopRes.ok) {
+        const s = await sopRes.json();
+        setSop(s);
+        if (!s.canEdit) {
+          router.push(`/sop/${sopId}`);
+          return;
+        }
+        setFormData({
+          title: s.title,
+          department: s.departmentId,
+          purpose: s.purpose,
+          scope: s.scope,
+          procedure: s.procedure || [],
+          responsibilities: s.responsibilities || [],
+          accountability: s.accountability || [],
+          exceptions: s.exceptions || '',
+        });
+      } else {
+        router.push('/dashboard');
+      }
       if (dRes.ok) setDepartments(await dRes.json());
       if (rRes.ok) {
         const r = await rRes.json();
         setRoles(r.map((x) => ({ id: x.id, name: x.name, description: x.description })));
       }
     })();
-  }, []);
-
-  const userDeptIds = (user?.departments || []).map((d) => (typeof d === 'object' ? d.id : d));
-  const allowedDepts = user?.roles?.includes('super_admin')
-    ? departments
-    : departments.filter((d) => userDeptIds.includes(d.id));
+  }, [sopId]);
 
   const addResponsibility = () => {
     setFormData((p) => ({
@@ -84,25 +92,18 @@ export default function CreateSOPClient({ user }) {
     }));
   };
 
-  const handleSubmit = async (action) => {
+  const handleSubmit = async () => {
+    if (!formData) return;
     setError('');
     setLoading(true);
     try {
-      const res = await fetch('/api/sops', {
-        method: 'POST',
+      const res = await fetch(`/api/sops/${sopId}`, {
+        method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          ...formData,
-          status: action === 'submit' ? 'submitted' : 'draft',
-        }),
+        body: JSON.stringify(formData),
       });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error || 'Failed to save');
-      if (action === 'submit') {
-        const submitRes = await fetch(`/api/sops/${data.id}/submit`, { method: 'POST' });
-        if (!submitRes.ok) throw new Error('Failed to submit');
-      }
-      router.push(`/sop/${data.id}`);
+      if (!res.ok) throw new Error((await res.json()).error || 'Failed to update');
+      router.push(`/sop/${sopId}`);
       router.refresh();
     } catch (err) {
       setError(err.message || 'Something went wrong');
@@ -111,29 +112,39 @@ export default function CreateSOPClient({ user }) {
     }
   };
 
+  if (!formData) {
+    return (
+      <div className="min-h-screen bg-white">
+        <Navbar user={user} />
+        <main className="max-w-4xl mx-auto px-8 py-8">
+          <div className="h-96 bg-gray-100 rounded-2xl animate-pulse" />
+        </main>
+      </div>
+    );
+  }
+
+  const userDeptIds = (user?.departments || []).map((d) => (typeof d === 'object' ? d.id : d));
+  const allowedDepts = user?.roles?.includes('super_admin')
+    ? departments
+    : departments.filter((d) => userDeptIds.includes(d.id));
+
   return (
     <div className="min-h-screen bg-white">
       <Navbar user={user} />
       <main className="max-w-4xl mx-auto px-8 py-8">
         <div className="flex items-center justify-between mb-8">
           <div className="flex items-center gap-4">
-            <Link href="/dashboard" className="p-2 hover:bg-gray-50 rounded-xl">
+            <Link href={`/sop/${sopId}`} className="p-2 hover:bg-gray-50 rounded-xl">
               <ArrowLeftIcon className="w-6 h-6" />
             </Link>
             <div>
-              <h1 className="text-2xl font-semibold text-[#111827]">Create New SOP</h1>
-              <p className="text-gray-600 text-sm">Create a comprehensive Standard Operating Procedure</p>
+              <h1 className="text-2xl font-semibold text-[#111827]">Edit SOP</h1>
+              <p className="text-gray-600 text-sm">{formData.title}</p>
             </div>
           </div>
         </div>
 
-        <form
-          onSubmit={(e) => {
-            e.preventDefault();
-            handleSubmit('save');
-          }}
-          className="bg-white border border-gray-200 rounded-2xl shadow-sm p-8"
-        >
+        <div className="bg-white border border-gray-200 rounded-2xl shadow-sm p-8">
           {error && (
             <div className="mb-6 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-xl text-sm">
               {error}
@@ -149,7 +160,6 @@ export default function CreateSOPClient({ user }) {
                 value={formData.title}
                 onChange={(e) => setFormData({ ...formData, title: e.target.value })}
                 className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-black/10"
-                placeholder="Enter SOP title"
               />
             </div>
             <div>
@@ -160,7 +170,6 @@ export default function CreateSOPClient({ user }) {
                 onChange={(e) => setFormData({ ...formData, department: e.target.value })}
                 className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-black/10"
               >
-                <option value="">Select Department</option>
                 {allowedDepts.map((d) => (
                   <option key={d.id} value={d.id}>{d.name}</option>
                 ))}
@@ -176,7 +185,6 @@ export default function CreateSOPClient({ user }) {
               value={formData.purpose}
               onChange={(e) => setFormData({ ...formData, purpose: e.target.value })}
               className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-black/10 resize-none"
-              placeholder="What is the objective of this SOP?"
             />
           </div>
 
@@ -188,7 +196,6 @@ export default function CreateSOPClient({ user }) {
               value={formData.scope}
               onChange={(e) => setFormData({ ...formData, scope: e.target.value })}
               className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-black/10 resize-none"
-              placeholder="What areas does this SOP cover?"
             />
           </div>
 
@@ -273,7 +280,6 @@ export default function CreateSOPClient({ user }) {
                   value={formData.exceptions || ''}
                   onChange={(e) => setFormData({ ...formData, exceptions: e.target.value })}
                   className="w-full px-4 py-3 rounded-xl border border-gray-200"
-                  placeholder="Any exceptions to this SOP"
                 />
               </div>
             </div>
@@ -281,22 +287,20 @@ export default function CreateSOPClient({ user }) {
 
           <div className="flex gap-4">
             <button
-              type="submit"
-              disabled={loading}
-              className="px-6 py-3 rounded-xl border border-gray-200 hover:bg-gray-50 font-medium disabled:opacity-50"
-            >
-              Save as Draft
-            </button>
-            <button
-              type="button"
-              onClick={() => handleSubmit('submit')}
+              onClick={handleSubmit}
               disabled={loading}
               className="px-6 py-3 rounded-xl bg-black text-white font-medium hover:bg-gray-800 disabled:opacity-50"
             >
-              Submit for Approval
+              Save Changes
             </button>
+            <Link
+              href={`/sop/${sopId}`}
+              className="px-6 py-3 rounded-xl border border-gray-200 hover:bg-gray-50 font-medium"
+            >
+              Cancel
+            </Link>
           </div>
-        </form>
+        </div>
       </main>
     </div>
   );

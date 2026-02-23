@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { PlusIcon, MinusIcon, ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/24/outline';
 
 export default function ProcedureStepBuilder({ steps, onChange }) {
-  const [expanded, setExpanded] = useState({});
+  const [expanded, setExpanded] = useState<Record<number, boolean>>({});
 
   const addStep = () => {
     const newStep = {

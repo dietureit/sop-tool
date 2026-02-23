@@ -23,7 +23,7 @@ export async function GET(request) {
     const skip = (page - 1) * limit;
 
     await connectDB();
-    let query = {};
+    let query: Record<string, any> = {};
     if (user) query.user = user;
     if (action) query.action = action;
     if (resourceType) query.resourceType = resourceType;

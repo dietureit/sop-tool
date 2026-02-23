@@ -28,7 +28,7 @@ export async function POST(request, { params }) {
 
     er.status = 'approved';
     er.approver = session.user.id;
-    let body = {};
+    let body: Record<string, any> = {};
     try {
       body = await request.json();
     } catch (_) {}

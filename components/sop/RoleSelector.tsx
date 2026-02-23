@@ -6,7 +6,7 @@ import { ChevronUpDownIcon } from '@heroicons/react/24/outline';
 export default function RoleSelector({ roles, value, onChange, placeholder = 'Select role' }) {
   const [open, setOpen] = useState(false);
   const [filter, setFilter] = useState('');
-  const ref = useRef(null);
+  const ref = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     const handleClickOutside = (e) => {

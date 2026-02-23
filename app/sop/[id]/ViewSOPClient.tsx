@@ -18,8 +18,8 @@ import {
 
 export default function ViewSOPClient({ sopId, user }) {
   const router = useRouter();
-  const [sop, setSop] = useState(null);
-  const [comments, setComments] = useState([]);
+  const [sop, setSop] = useState<any | null>(null);
+  const [comments, setComments] = useState<any[]>([]);
   const [newComment, setNewComment] = useState('');
   const [loading, setLoading] = useState(true);
   const [actionLoading, setActionLoading] = useState('');
@@ -233,7 +233,7 @@ export default function ViewSOPClient({ sopId, user }) {
                 {sop.status === 'draft' && sop.authorId === user?.id && (
                   <button
                     onClick={() => handleAction('submit')}
-                    disabled={actionLoading}
+                    disabled={Boolean(actionLoading)}
                     className="flex items-center gap-2 w-full px-4 py-3 rounded-xl bg-black text-white hover:bg-gray-800 disabled:opacity-50"
                   >
                     <PaperAirplaneIcon className="w-5 h-5" />
@@ -244,7 +244,7 @@ export default function ViewSOPClient({ sopId, user }) {
                   <>
                     <button
                       onClick={() => handleAction('approve')}
-                      disabled={actionLoading}
+                      disabled={Boolean(actionLoading)}
                       className="flex items-center gap-2 w-full px-4 py-3 rounded-xl bg-green-600 text-white hover:bg-green-700 disabled:opacity-50"
                     >
                       <CheckCircleIcon className="w-5 h-5" />
@@ -252,7 +252,7 @@ export default function ViewSOPClient({ sopId, user }) {
                     </button>
                     <button
                       onClick={() => setShowRejectModal(true)}
-                      disabled={actionLoading}
+                      disabled={Boolean(actionLoading)}
                       className="flex items-center gap-2 w-full px-4 py-3 rounded-xl bg-red-600 text-white hover:bg-red-700 disabled:opacity-50"
                     >
                       <XCircleIcon className="w-5 h-5" />
@@ -263,7 +263,7 @@ export default function ViewSOPClient({ sopId, user }) {
                 {(sop.status === 'approved' || sop.status === 'rejected') && sop.authorId === user?.id && !sop.editPermission && (
                   <button
                     onClick={requestEdit}
-                    disabled={actionLoading}
+                    disabled={Boolean(actionLoading)}
                     className="flex items-center gap-2 w-full px-4 py-3 rounded-xl border border-gray-200 hover:bg-gray-50"
                   >
                     Request Edit Permission
@@ -331,7 +331,7 @@ export default function ViewSOPClient({ sopId, user }) {
             <div className="flex gap-2">
               <button
                 onClick={() => handleAction('reject')}
-                disabled={!rejectReason.trim() || actionLoading}
+                disabled={!rejectReason.trim() || Boolean(actionLoading)}
                 className="flex-1 px-4 py-3 rounded-xl bg-red-600 text-white hover:bg-red-700 disabled:opacity-50"
               >
                 Reject

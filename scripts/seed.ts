@@ -3,14 +3,13 @@ import bcrypt from 'bcryptjs';
 import dotenv from 'dotenv';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
+import User from '../models/User';
+import Department from '../models/Department';
+import RoleDefinition from '../models/RoleDefinition';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 dotenv.config({ path: join(__dirname, '..', '.env.local') });
-
-const User = (await import('../models/User.js')).default;
-const Department = (await import('../models/Department.js')).default;
-const RoleDefinition = (await import('../models/RoleDefinition.js')).default;
 
 const DEPARTMENTS = [
   'Human Resources',

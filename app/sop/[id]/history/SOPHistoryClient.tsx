@@ -7,8 +7,8 @@ import { formatDate } from '@/lib/utils';
 import { ArrowLeftIcon } from '@heroicons/react/24/outline';
 
 export default function SOPHistoryClient({ sopId, user }) {
-  const [sop, setSop] = useState(null);
-  const [versions, setVersions] = useState([]);
+  const [sop, setSop] = useState<any | null>(null);
+  const [versions, setVersions] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {

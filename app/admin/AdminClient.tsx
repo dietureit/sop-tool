@@ -13,12 +13,12 @@ import {
 } from '@heroicons/react/24/outline';
 
 function UserTab() {
-  const [users, setUsers] = useState([]);
-  const [departments, setDepartments] = useState([]);
+  const [users, setUsers] = useState<any[]>([]);
+  const [departments, setDepartments] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
-  const [editing, setEditing] = useState(null);
-  const [form, setForm] = useState({ username: '', email: '', password: '', roles: [], departments: [] });
+  const [editing, setEditing] = useState<any | null>(null);
+  const [form, setForm] = useState<any>({ username: '', email: '', password: '', roles: [], departments: [] });
 
   useEffect(() => {
     fetchUsers();
@@ -174,11 +174,11 @@ function UserTab() {
 }
 
 function DepartmentTab() {
-  const [depts, setDepts] = useState([]);
+  const [depts, setDepts] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
-  const [editing, setEditing] = useState(null);
-  const [form, setForm] = useState({ name: '', description: '' });
+  const [editing, setEditing] = useState<any | null>(null);
+  const [form, setForm] = useState<any>({ name: '', description: '' });
 
   useEffect(() => { fetchDepts(); }, []);
 
@@ -249,11 +249,11 @@ function DepartmentTab() {
 }
 
 function RoleTab() {
-  const [roles, setRoles] = useState([]);
+  const [roles, setRoles] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
-  const [editing, setEditing] = useState(null);
-  const [form, setForm] = useState({ name: '', description: '' });
+  const [editing, setEditing] = useState<any | null>(null);
+  const [form, setForm] = useState<any>({ name: '', description: '' });
 
   useEffect(() => {
     fetchRoles();
