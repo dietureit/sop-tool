@@ -6,10 +6,23 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "seed": "node scripts/seed.mjs",
+    "create-admin": "node scripts/create-admin.mjs",
+    "migrate": "node scripts/migrate-from-sopmaster.mjs"
   },
   "dependencies": {
+    "@headlessui/react": "^2.2.9",
+    "@heroicons/react": "^2.2.0",
+    "axios": "^1.13.5",
+    "bcryptjs": "^3.0.3",
+    "better-sqlite3": "^12.6.2",
+    "classnames": "^2.5.1",
+    "dotenv": "^17.3.1",
+    "jspdf": "^4.2.0",
+    "mongoose": "^9.2.1",
     "next": "16.1.6",
+    "next-auth": "^4.24.13",
     "react": "19.2.3",
     "react-dom": "19.2.3"
   },

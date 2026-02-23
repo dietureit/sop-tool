@@ -1,36 +1,67 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# SOP Manager
 
-## Getting Started
+SOP Manager is a multi-tenant SaaS web application for creating, managing, approving, and tracking Standard Operating Procedures (SOPs) across departments. Built with Next.js 16, MongoDB, and NextAuth.js.
 
-First, run the development server:
+## Tech Stack
+
+- **Frontend**: Next.js 16 (App Router), React 19, Tailwind CSS 4, Headless UI, Heroicons
+- **Backend**: Next.js API Routes (Route Handlers)
+- **Database**: MongoDB with Mongoose ODM
+- **Authentication**: NextAuth.js (Credentials Provider) with bcrypt password hashing
+
+## Prerequisites
+
+- Node.js 20.9+ (LTS)
+- MongoDB (local or Atlas)
+
+## Setup
+
+1. **Install dependencies**
+   ```bash
+   npm install
+   ```
+
+2. **Configure environment**
+   ```bash
+   cp .env.local.example .env.local
+   # Edit .env.local with your MONGODB_URI and NEXTAUTH_SECRET
+   ```
+
+3. **Seed the database**
+   ```bash
+   npm run seed
+   ```
+   Creates default admin user (username: `admin`, password: `admin`), 8 departments, and 8 role definitions.
+
+4. **Run development server**
+   ```bash
+   npm run dev
+   ```
+   Open [http://localhost:3000](http://localhost:3000)
+
+## Migration from SopMaster-1 (SQLite)
+
+To migrate existing data from SopMaster-1:
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+# Dry run (no writes)
+npm run migrate -- --dry-run
+
+# Full migration (requires SQLite path)
+SQLITE_PATH=/path/to/SopMaster-1/sop.db npm run migrate
+# Or: npm run migrate -- /path/to/sop.db
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Default Login
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+- **Username**: admin
+- **Password**: admin
+- **Role**: Super Admin (full access)
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Scripts
 
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- `npm run dev` - Start development server
+- `npm run build` - Build for production
+- `npm run start` - Start production server
+- `npm run seed` - Seed database with default data
+- `npm run migrate` - Migrate from SopMaster-1 SQLite
