@@ -17,7 +17,7 @@ export async function GET(request) {
 
     await connectDB();
     const userDeptIds = (session.user.departments || []).map((d) => (typeof d === 'object' ? d.id : d));
-    let query = { status };
+    const query: any = { status };
     if (!session.user.roles?.includes('super_admin') && userDeptIds.length) {
       const sopsInDept = await SOP.find({ department: { $in: userDeptIds } }).distinct('_id');
       query.sop = { $in: sopsInDept };

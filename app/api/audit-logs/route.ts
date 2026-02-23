@@ -23,14 +23,14 @@ export async function GET(request) {
     const skip = (page - 1) * limit;
 
     await connectDB();
-    let query: Record<string, any> = {};
+    const query: any = {};
     if (user) query.user = user;
     if (action) query.action = action;
     if (resourceType) query.resourceType = resourceType;
     if (startDate || endDate) {
-      query.timestamp = {};
-      if (startDate) query.timestamp.$gte = new Date(startDate);
-      if (endDate) query.timestamp.$lte = new Date(endDate + 'T23:59:59.999Z');
+      (query as any).timestamp = {};
+      if (startDate) (query as any).timestamp.$gte = new Date(startDate);
+      if (endDate) (query as any).timestamp.$lte = new Date(endDate + 'T23:59:59.999Z');
     }
 
     const [logs, total] = await Promise.all([

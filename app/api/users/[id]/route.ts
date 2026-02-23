@@ -49,7 +49,7 @@ export async function PUT(request, { params }) {
     if (!user) return NextResponse.json({ error: 'Not found' }, { status: 404 });
     if (username?.trim()) user.username = username.trim();
     if (email?.trim()) user.email = email.trim().toLowerCase();
-    if (password?.trim()) user.passwordHash = await User.hashPassword(password);
+    if (password?.trim()) user.passwordHash = await (User as any).hashPassword(password);
     if (Array.isArray(roles)) {
       const validRoles = ['super_admin', 'sop_writer', 'sop_approver'];
       user.roles = roles.filter((r) => validRoles.includes(r));

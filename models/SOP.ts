@@ -92,5 +92,5 @@ sopSchema.index({ status: 1 });
 sopSchema.index({ department: 1 });
 sopSchema.index({ author: 1 });
 
-const SOP = mongoose.models.SOP || mongoose.model('SOP', sopSchema);
+const SOP = (mongoose.models.SOP || mongoose.model('SOP', sopSchema)) as mongoose.Model<any>;
 export default SOP;

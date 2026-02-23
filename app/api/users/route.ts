@@ -57,7 +57,7 @@ export async function POST(request) {
     await connectDB();
     const existing = await User.findOne({ $or: [{ username: username.trim() }, { email: email.trim().toLowerCase() }] });
     if (existing) return NextResponse.json({ error: 'Username or email already exists' }, { status: 400 });
-    const passwordHash = await User.hashPassword(password);
+    const passwordHash = await (User as any).hashPassword(password);
     const user = await User.create({
       username: username.trim(),
       email: email.trim().toLowerCase(),

@@ -33,5 +33,5 @@ const editRequestSchema = new mongoose.Schema(
 editRequestSchema.index({ sop: 1 });
 editRequestSchema.index({ status: 1 });
 
-const EditRequest = mongoose.models.EditRequest || mongoose.model('EditRequest', editRequestSchema);
+const EditRequest = (mongoose.models.EditRequest || mongoose.model('EditRequest', editRequestSchema)) as mongoose.Model<any>;
 export default EditRequest;

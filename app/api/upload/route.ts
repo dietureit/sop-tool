@@ -17,14 +17,14 @@ export async function POST(request) {
     const file = formData.get('file');
     const type = formData.get('type') || 'documents'; // images | documents
 
-    if (!file || !(file instanceof Blob)) {
+    if (!file || !(file instanceof File)) {
       return NextResponse.json({ error: 'No file provided' }, { status: 400 });
     }
     if (file.size > MAX_SIZE) {
       return NextResponse.json({ error: 'File too large' }, { status: 400 });
     }
 
-    const ext = path.extname(file.name) || '';
+    const ext = path.extname(file.name || '') || '';
     const filename = `${randomUUID()}${ext}`;
     const dir = path.join(process.cwd(), UPLOAD_DIR, type);
     await mkdir(dir, { recursive: true });

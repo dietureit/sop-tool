@@ -6,7 +6,7 @@ function isPublicPath(pathname) {
   return publicPaths.some((p) => pathname === p || (p !== '/' && pathname.startsWith(p + '/')));
 }
 
-export async function middleware(request) {
+export async function proxy(request) {
   const { pathname } = request.nextUrl;
 
   if (isPublicPath(pathname)) {

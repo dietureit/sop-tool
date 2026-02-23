@@ -1,10 +1,11 @@
+import type { NextAuthOptions } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import connectDB from '@/lib/db';
 import User from '@/models/User';
 import Department from '@/models/Department';
 import AuditLog from '@/models/AuditLog';
 
-export const authOptions = {
+export const authOptions: NextAuthOptions = {
   providers: [
     CredentialsProvider({
       name: 'Credentials',
@@ -13,7 +14,7 @@ export const authOptions = {
         password: { label: 'Password', type: 'password' },
       },
       async authorize(credentials) {
-        const username = (credentials?.username ?? credentials?.email ?? '').toString().trim();
+        const username = (credentials?.username ?? '').toString().trim();
         const password = (credentials?.password ?? '').toString();
         if (!username || !password) {
           return null;

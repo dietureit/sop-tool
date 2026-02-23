@@ -58,5 +58,5 @@ const sopVersionSchema = new mongoose.Schema({
 
 sopVersionSchema.index({ sop: 1, versionNumber: 1 });
 
-const SOPVersion = mongoose.models.SOPVersion || mongoose.model('SOPVersion', sopVersionSchema);
+const SOPVersion = (mongoose.models.SOPVersion || mongoose.model('SOPVersion', sopVersionSchema)) as mongoose.Model<any>;
 export default SOPVersion;

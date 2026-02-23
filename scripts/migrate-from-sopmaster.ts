@@ -97,7 +97,7 @@ async function run() {
 
   try {
     // 1. Departments (Flask-SQLAlchemy table: department)
-    const deptRows = sqlite.prepare('SELECT id, name FROM department').all();
+    const deptRows: any[] = sqlite.prepare('SELECT id, name FROM department').all();
     console.log(`Departments: ${deptRows.length}`);
     if (!DRY_RUN) {
       for (const r of deptRows) {
@@ -109,7 +109,7 @@ async function run() {
     }
 
     // 2. Role definitions
-    let roleRows = [];
+    let roleRows: any[] = [];
     try {
       roleRows = sqlite.prepare('SELECT id, name, description, is_active FROM role_definition').all();
     } catch (_) {}
@@ -126,7 +126,7 @@ async function run() {
     }
 
     // 3. Users
-    const userRows = sqlite.prepare('SELECT id, username, password_hash, role FROM user').all();
+    const userRows: any[] = sqlite.prepare('SELECT id, username, password_hash, role FROM user').all();
     console.log(`Users: ${userRows.length}`);
     const userDeptRows = [];
     try {
@@ -149,7 +149,7 @@ async function run() {
     }
 
     // 4. SOPs
-    const sopRows = sqlite.prepare('SELECT * FROM sop').all();
+    const sopRows: any[] = sqlite.prepare('SELECT * FROM sop').all();
     console.log(`SOPs: ${sopRows.length}`);
     if (!DRY_RUN) {
       for (const r of sopRows) {
@@ -183,7 +183,7 @@ async function run() {
     }
 
     // 5. SOP versions
-    let verRows = [];
+    let verRows: any[] = [];
     try {
       verRows = sqlite.prepare('SELECT * FROM sop_version').all();
     } catch (_) {}
@@ -208,7 +208,7 @@ async function run() {
     }
 
     // 6. SOP comments
-    let commentRows = [];
+    let commentRows: any[] = [];
     try {
       commentRows = sqlite.prepare('SELECT * FROM sop_comment').all();
     } catch (_) {}
@@ -245,7 +245,7 @@ async function run() {
     }
 
     // 8. Audit logs
-    let auditRows = [];
+    let auditRows: any[] = [];
     try {
       auditRows = sqlite.prepare('SELECT * FROM audit_logs').all();
     } catch (_) {}

@@ -19,5 +19,5 @@ const roleDefinitionSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-const RoleDefinition = mongoose.models.RoleDefinition || mongoose.model('RoleDefinition', roleDefinitionSchema);
+const RoleDefinition = (mongoose.models.RoleDefinition || mongoose.model('RoleDefinition', roleDefinitionSchema)) as mongoose.Model<any>;
 export default RoleDefinition;

@@ -18,5 +18,5 @@ const departmentSchema = new mongoose.Schema(
 
 departmentSchema.index({ name: 1 }, { unique: true });
 
-const Department = mongoose.models.Department || mongoose.model('Department', departmentSchema);
+const Department = (mongoose.models.Department || mongoose.model('Department', departmentSchema)) as mongoose.Model<any>;
 export default Department;

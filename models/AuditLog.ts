@@ -30,5 +30,5 @@ auditLogSchema.index({ timestamp: -1 });
 auditLogSchema.index({ user: 1 });
 auditLogSchema.index({ resourceType: 1, resourceId: 1 });
 
-const AuditLog = mongoose.models.AuditLog || mongoose.model('AuditLog', auditLogSchema);
+const AuditLog = (mongoose.models.AuditLog || mongoose.model('AuditLog', auditLogSchema)) as mongoose.Model<any>;
 export default AuditLog;

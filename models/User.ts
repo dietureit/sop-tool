@@ -55,5 +55,5 @@ userSchema.methods.hasRole = function (role) {
   return this.roles && this.roles.includes(role);
 };
 
-const User = mongoose.models.User || mongoose.model('User', userSchema);
+const User = (mongoose.models.User || mongoose.model('User', userSchema)) as mongoose.Model<any>;
 export default User;

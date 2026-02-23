@@ -23,5 +23,5 @@ const sopCommentSchema = new mongoose.Schema({
 
 sopCommentSchema.index({ sop: 1 });
 
-const SOPComment = mongoose.models.SOPComment || mongoose.model('SOPComment', sopCommentSchema);
+const SOPComment = (mongoose.models.SOPComment || mongoose.model('SOPComment', sopCommentSchema)) as mongoose.Model<any>;
 export default SOPComment;
