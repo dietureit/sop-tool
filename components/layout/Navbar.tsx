@@ -10,6 +10,7 @@ import {
   ArrowRightOnRectangleIcon,
   Cog6ToothIcon,
 } from '@heroicons/react/24/outline';
+import Image from 'next/image';
 
 const roleLabels = {
   super_admin: 'Super Admin',
@@ -26,8 +27,8 @@ export default function Navbar({ user }) {
       <div className="max-w-7xl mx-auto px-8 py-6">
         <div className="flex items-center justify-between">
           <Link href="/dashboard" className="flex items-center space-x-3">
-            <div className="w-8 h-8 bg-black rounded-lg flex items-center justify-center">
-              <span className="text-white text-sm font-bold">S</span>
+            <div className="w-10 h-10 rounded-lg flex items-center justify-center">
+              <Image src="/company.svg" alt="Logo" width={50} height={50} />
             </div>
             <span className="text-xl font-semibold text-[#111827]">SOP Manager</span>
           </Link>
